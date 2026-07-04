@@ -1,0 +1,29 @@
+.back-to-top {
+  position: fixed;
+  bottom: 70px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:active {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
