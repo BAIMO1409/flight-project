@@ -1,7 +1,7 @@
 import axios, { CancelTokenSource, AxiosResponse } from 'axios';
 import { Flight, DateItem, SortType } from '../types';
 
-const BASE_URL = 'http://localhost:3002';
+const BASE_URL = 'http://localhost:3003';
 
 const instance = axios.create({
   baseURL: BASE_URL,
