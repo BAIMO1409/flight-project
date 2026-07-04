@@ -1,10 +1,14 @@
 import React from 'react';
 import './Skeleton.scss';
 
-const Skeleton: React.FC = () => {
+interface SkeletonProps {
+  count?: number;
+}
+
+const Skeleton: React.FC<SkeletonProps> = ({ count = 3 }) => {
   return (
     <div className="skeleton-list">
-      {[1, 2, 3].map((item) => (
+      {Array.from({ length: count }, (_, i) => i + 1).map((item) => (
         <div key={item} className="skeleton-card">
           <div className="skeleton-info">
             <div className="skeleton-time-section">

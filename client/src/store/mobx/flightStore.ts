@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Flight, DateItem, SortType } from '../../types';
-import { generateDateList, generateMockFlights } from '../../utils';
+import { api, storage } from '../../services/api';
 
 class FlightStore {
   flights: Flight[] = [];
@@ -14,47 +14,64 @@ class FlightStore {
     this.init();
   }
 
-  init() {
-    this.dateList = generateDateList();
-    this.selectedDate = this.dateList[1]?.date || '';
-    this.loadFlights();
+  async init() {
+    try {
+      const storedDate = storage.getSelectedDate();
+      const storedSort = storage.getSortType();
+      
+      const datesResponse = await api.getDates();
+      
+      runInAction(() => {
+        this.dateList = datesResponse.data;
+        
+        if (storedDate && this.dateList.find(item => item.date === storedDate)) {
+          this.selectedDate = storedDate;
+        } else {
+          this.selectedDate = this.dateList[1]?.date || '';
+        }
+        
+        if (storedSort) {
+          this.sortType = storedSort;
+        } else {
+          this.sortType = 'recommend';
+        }
+      });
+      
+      await this.loadFlights();
+    } catch (error) {
+      console.error('Failed to initialize:', error);
+    }
   }
 
   setSelectedDate(date: string) {
     this.selectedDate = date;
+    storage.saveSelectedDate(date);
     this.loadFlights();
   }
 
   setSortType(sort: SortType) {
     this.sortType = sort;
+    storage.saveSortType(sort);
     this.loadFlights();
   }
 
   async loadFlights() {
     this.isLoading = true;
     
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const selectedDateItem = this.dateList.find(item => item.date === this.selectedDate);
-    const basePrice = selectedDateItem?.price || 400;
-    
-    let flights = generateMockFlights(basePrice);
-    
-    switch (this.sortType) {
-      case 'price':
-        flights = flights.sort((a, b) => a.price - b.price);
-        break;
-      case 'time':
-        flights = flights.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
-        break;
-      default:
-        break;
+    try {
+      const response = await api.getFlights(this.selectedDate, this.sortType);
+      
+      runInAction(() => {
+        this.flights = response.data.flights;
+        this.dateList = response.data.dateList;
+        this.isLoading = false;
+      });
+    } catch (error) {
+      console.error('Failed to load flights:', error);
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
-    
-    runInAction(() => {
-      this.flights = flights;
-      this.isLoading = false;
-    });
   }
 }
 

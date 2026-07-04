@@ -79,6 +79,10 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleRefresh = useCallback(() => {
+    flightStore.loadFlights();
+  }, []);
+
   return (
     <div className="app">
       <Header />
@@ -90,7 +94,7 @@ const App: React.FC = () => {
       />
 
       <div className="list-container">
-        <FlightList flights={flights} isLoading={isLoading} />
+        <FlightList flights={flights} isLoading={isLoading} onRefresh={handleRefresh} />
       </div>
 
       <FilterBar
