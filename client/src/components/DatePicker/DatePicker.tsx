@@ -6,9 +6,10 @@ interface DatePickerProps {
   dateList: DateItem[];
   selectedDate: string;
   onDateChange: (date: string) => void;
+  isVisible: boolean;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ dateList, selectedDate, onDateChange }) => {
+const DatePicker: React.FC<DatePickerProps> = ({ dateList, selectedDate, onDateChange, isVisible }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleDateClick = (date: string, element: HTMLDivElement) => {
@@ -17,7 +18,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ dateList, selectedDate, onDateC
   };
 
   return (
-    <div className="date-picker">
+    <div className={`date-picker ${isVisible ? 'visible' : ''}`}>
       <div className="date-scroll" ref={scrollRef}>
         <div className="date-list">
           {dateList.map((item) => (

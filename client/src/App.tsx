@@ -1,49 +1,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useDispatch, useSelector } from 'react-redux';
 import Header from './components/Header/Header';
 import DatePicker from './components/DatePicker/DatePicker';
 import FlightList from './components/FlightList/FlightList';
 import FilterBar from './components/FilterBar/FilterBar';
 import BackToTop from './components/BackToTop/BackToTop';
 import { flightStore } from './store/mobx/flightStore';
-import { store as reduxStore, loadFlightsAsync, AppDispatch } from './store/redux/store';
-import { ReduxState } from './store/redux/types';
 import { SortType } from './types';
 import './App.scss';
 
+const HEADER_HEIGHT = 60;
+const DATE_PICKER_HEIGHT = 80;
+
 const App: React.FC = () => {
-  const [useMobx, setUseMobx] = useState(true);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(true);
   const [filterBarVisible, setFilterBarVisible] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [scrollTimeout, setScrollTimeout] = useState<number | null>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
-  const reduxState = useSelector((state: ReduxState) => state);
-
-  const flights = useMobx ? flightStore.flights : reduxState.flights;
-  const dateList = useMobx ? flightStore.dateList : reduxState.dateList;
-  const selectedDate = useMobx ? flightStore.selectedDate : reduxState.selectedDate;
-  const sortType = useMobx ? flightStore.sortType : reduxState.sortType;
-  const isLoading = useMobx ? flightStore.isLoading : reduxState.isLoading;
+  const flights = flightStore.flights;
+  const dateList = flightStore.dateList;
+  const selectedDate = flightStore.selectedDate;
+  const sortType = flightStore.sortType;
+  const isLoading = flightStore.isLoading;
 
   const handleDateChange = useCallback((date: string) => {
-    if (useMobx) {
-      flightStore.setSelectedDate(date);
-    } else {
-      dispatch({ type: 'SET_SELECTED_DATE', payload: date });
-      dispatch(loadFlightsAsync(date, reduxState.sortType));
-    }
-  }, [useMobx, dispatch, reduxState.sortType]);
+    flightStore.setSelectedDate(date);
+  }, []);
 
   const handleSortChange = useCallback((sort: SortType) => {
-    if (useMobx) {
-      flightStore.setSortType(sort);
-    } else {
-      dispatch({ type: 'SET_SORT_TYPE', payload: sort });
-      dispatch(loadFlightsAsync(reduxState.selectedDate, sort));
-    }
-  }, [useMobx, dispatch, reduxState.selectedDate]);
+    flightStore.setSortType(sort);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,28 +44,40 @@ const App: React.FC = () => {
         setShowBackToTop(false);
       }
 
-      if (scrollTop > lastScrollTop && scrollTop > 100) {
-        setFilterBarVisible(false);
-      } else {
-        setFilterBarVisible(true);
+      const headerBottom = HEADER_HEIGHT + ((window as any).safeAreaInsets?.top || 0);
+      const totalTopHeight = headerBottom + DATE_PICKER_HEIGHT;
+
+      setIsScrolling(true);
+
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
       }
 
+      setDatePickerVisible(false);
+      setFilterBarVisible(false);
+
+      const timeout = window.setTimeout(() => {
+        setIsScrolling(false);
+        setDatePickerVisible(true);
+        setFilterBarVisible(true);
+      }, 200);
+      
+      setScrollTimeout(timeout);
       setLastScrollTop(scrollTop);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, [lastScrollTop, scrollTimeout]);
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    if (!useMobx && flights.length === 0) {
-      dispatch(loadFlightsAsync(selectedDate, sortType));
-    }
-  }, []);
 
   return (
     <div className="app">
@@ -85,22 +86,8 @@ const App: React.FC = () => {
         dateList={dateList}
         selectedDate={selectedDate}
         onDateChange={handleDateChange}
+        isVisible={datePickerVisible}
       />
-      
-      <div className="toggle-container">
-        <button
-          className={`toggle-btn ${useMobx ? 'active' : ''}`}
-          onClick={() => setUseMobx(true)}
-        >
-          MobX
-        </button>
-        <button
-          className={`toggle-btn ${!useMobx ? 'active' : ''}`}
-          onClick={() => setUseMobx(false)}
-        >
-          Redux
-        </button>
-      </div>
 
       <div className="list-container">
         <FlightList flights={flights} isLoading={isLoading} />

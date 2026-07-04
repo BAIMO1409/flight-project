@@ -35,10 +35,12 @@ export const generateDateList = (days: number = 14): DateItem[] => {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
     
+    const basePrice = Math.floor(Math.random() * 200) + 350;
+    
     result.push({
       date: formatDate(date),
       week: getDateLabel(date),
-      price: Math.floor(Math.random() * 200) + 350,
+      price: basePrice,
       isToday: i === 0,
     });
   }
@@ -46,7 +48,7 @@ export const generateDateList = (days: number = 14): DateItem[] => {
   return result;
 };
 
-export const generateMockFlights = (): Flight[] => {
+export const generateMockFlights = (basePrice: number = 400): Flight[] => {
   const airlines = ['国航', '东航', '南航', '海航', '吉祥航空', '厦航', '川航', '华夏航空'];
   const departureAirports = ['北京大兴', '首都T1', '首都T2', '首都T3'];
   const arrivalAirports = ['浦东T1', '浦东T2', '虹桥T1', '虹桥T2'];
@@ -60,21 +62,25 @@ export const generateMockFlights = (): Flight[] => {
     const arrivalHour = Math.floor((departureHour * 60 + duration) / 60) % 24;
     const arrivalMinute = (departureHour * 60 + duration) % 60;
     
+    const flightPrice = Math.floor(Math.random() * 100) + basePrice - 50;
+    
     flights.push({
       id: `flight-${i + 1}`,
       flightNo: `${['CA', 'MU', 'CZ', 'HU', 'HO', 'MF', '3U', 'G5'][Math.floor(Math.random() * 8)]}${Math.floor(Math.random() * 9000) + 1000}`,
       airline: airlines[Math.floor(Math.random() * airlines.length)],
-      departureTime: `${String(departureHour).padStart(2, '0')}:${String(Math.floor(Math.random() * 6)).padStart(2, '0')}0`,
+      departureTime: `${String(departureHour).padStart(2, '0')}:${String(Math.floor(Math.random() * 6) * 10).padStart(2, '0')}`,
       arrivalTime: `${String(arrivalHour).padStart(2, '0')}:${String(arrivalMinute).padStart(2, '0')}`,
       departureAirport: departureAirports[Math.floor(Math.random() * departureAirports.length)],
       arrivalAirport: arrivalAirports[Math.floor(Math.random() * arrivalAirports.length)],
-      price: Math.floor(Math.random() * 200) + 350,
+      price: flightPrice,
       discount: `${(Math.random() * 4 + 3).toFixed(1)}折`,
       duration: `${Math.floor(duration / 60)}时${duration % 60}分`,
       aircraft: aircrafts[Math.floor(Math.random() * aircrafts.length)],
       seats: Math.random() > 0.7 ? '票少' : undefined,
     });
   }
+  
+  flights.sort((a, b) => a.price - b.price);
   
   return flights;
 };

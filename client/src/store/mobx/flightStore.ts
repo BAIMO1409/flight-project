@@ -35,7 +35,10 @@ class FlightStore {
     
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    let flights = generateMockFlights();
+    const selectedDateItem = this.dateList.find(item => item.date === this.selectedDate);
+    const basePrice = selectedDateItem?.price || 400;
+    
+    let flights = generateMockFlights(basePrice);
     
     switch (this.sortType) {
       case 'price':

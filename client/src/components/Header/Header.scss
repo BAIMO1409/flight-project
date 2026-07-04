@@ -1,4 +1,9 @@
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   padding: 16px;
   padding-top: calc(16px + env(safe-area-inset-top));
