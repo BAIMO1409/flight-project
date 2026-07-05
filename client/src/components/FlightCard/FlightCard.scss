@@ -3,13 +3,15 @@
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  padding: 16px;
-  margin-bottom: 8px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 20px 16px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
   
   &:active {
-    background: #f8f9fa;
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -32,10 +34,11 @@
 }
 
 .time {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  color: #333;
-  line-height: 1.2;
+  color: #1a1a1a;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
 }
 
 .airport {
@@ -112,9 +115,10 @@
 }
 
 .amount {
-  font-size: 28px;
+  font-size: 32px;
   color: #ff4d4f;
   font-weight: 700;
+  letter-spacing: -1px;
 }
 
 .discount {
