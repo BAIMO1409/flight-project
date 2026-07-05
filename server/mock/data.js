@@ -1,5 +1,4 @@
 // 基于种子的伪随机数生成器（线性同余生成器 LCG）
-// 相同种子会产生相同的随机序列，确保同一日期生成相同的航班数据
 function createSeededRandom(seed) {
   let state = seed;
   return function() {
@@ -8,7 +7,6 @@ function createSeededRandom(seed) {
   };
 }
 
-// 将日期字符串转换为数字种子
 function dateToSeed(dateStr) {
   let seed = 0;
   for (let i = 0; i < dateStr.length; i++) {
@@ -39,47 +37,13 @@ function getDateLabel(date) {
   return weekDays[date.getDay()];
 }
 
-// 日期列表缓存，避免每次请求都重新生成
-let dateListCache = null;
-
-function generateDateList(days = 14) {
-  if (dateListCache) {
-    return dateListCache;
-  }
-  
-  const result = [];
-  const today = new Date();
-  // 使用固定种子生成日期价格，确保每次启动服务后日期价格一致
-  const random = createSeededRandom(dateToSeed(formatDate(today)));
-  
-  for (let i = 0; i < days; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    
-    const basePrice = Math.floor(random() * 200) + 350;
-    
-    result.push({
-      date: formatDate(date),
-      week: getDateLabel(date),
-      price: basePrice,
-      isToday: i === 0,
-    });
-  }
-  
-  dateListCache = result;
-  return result;
-}
-
-// 航班数据缓存，按日期缓存生成的航班数据
 const flightsCache = new Map();
 
-function generateFlights(date, basePrice = 400) {
-  // 如果该日期已经生成过航班数据，直接返回缓存
+function generateFlights(date) {
   if (flightsCache.has(date)) {
     return flightsCache.get(date);
   }
   
-  // 使用日期作为种子，确保同一日期生成相同的航班数据
   const seed = dateToSeed(date);
   const random = createSeededRandom(seed);
   
@@ -97,7 +61,7 @@ function generateFlights(date, basePrice = 400) {
     const arrivalHour = Math.floor((departureHour * 60 + duration) / 60) % 24;
     const arrivalMinute = (departureHour * 60 + duration) % 60;
     
-    const flightPrice = Math.floor(random() * 100) + basePrice - 50;
+    const flightPrice = Math.floor(random() * 100) + 350;
     const prefixIndex = Math.floor(random() * flightPrefixes.length);
     
     flights.push({
@@ -116,9 +80,38 @@ function generateFlights(date, basePrice = 400) {
     });
   }
   
-  // 缓存该日期的航班数据
   flightsCache.set(date, flights);
   return flights;
+}
+
+let dateListCache = null;
+
+function generateDateList(days = 14) {
+  if (dateListCache) {
+    return dateListCache;
+  }
+  
+  const result = [];
+  const today = new Date();
+  
+  for (let i = 0; i < days; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    const dateStr = formatDate(date);
+    
+    const flights = generateFlights(dateStr);
+    const minPrice = Math.min(...flights.map(f => f.price));
+    
+    result.push({
+      date: dateStr,
+      week: getDateLabel(date),
+      price: minPrice,
+      isToday: i === 0,
+    });
+  }
+  
+  dateListCache = result;
+  return result;
 }
 
 module.exports = {

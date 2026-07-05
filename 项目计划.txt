@@ -117,6 +117,14 @@ flight-project/
 ├── ✅ 编写README文档（运行方式、技术栈选型依据、遇到的困难与解决）
 └── ✅ 测试验证（构建测试通过）
 
+阶段10：Redux状态管理实现（已完成）
+├── ✅ 创建feature/redux分支
+├── ✅ 创建Redux store和flightSlice（使用@reduxjs/toolkit）
+├── ✅ 创建自定义hooks（useAppDispatch、useAppSelector）
+├── ✅ 修改App.tsx使用Redux Provider和hooks
+├── ✅ 删除MobX相关文件和依赖
+└── ✅ 构建测试通过
+
 【当前状态】前端基础页面已可访问：http://localhost:3001/
 【展示内容】
 ├── Header：北京→上海路线展示

@@ -30,6 +30,7 @@
   background: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
   
   &:active {
     background: rgba(59, 130, 246, 0.1);

@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { observer } from 'mobx-react-lite';
+import { Provider } from 'react-redux';
 import Header from './components/Header/Header';
 import DatePicker from './components/DatePicker/DatePicker';
 import FlightList from './components/FlightList/FlightList';
 import FilterBar from './components/FilterBar/FilterBar';
 import BackToTop from './components/BackToTop/BackToTop';
-import { flightStore } from './store/mobx/flightStore';
+import { store } from './store/redux/store';
+import { useAppSelector, useAppDispatch } from './store/redux/hooks';
+import { setSelectedDate, setSortType, loadFlights, initFlightData } from './store/redux/flightSlice';
 import { SortType } from './types';
 import './App.scss';
 
 const HEADER_HEIGHT = 60;
 const DATE_PICKER_HEIGHT = 80;
 
-const App: React.FC = () => {
+const FlightApp: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [datePickerVisible, setDatePickerVisible] = useState(true);
   const [filterBarVisible, setFilterBarVisible] = useState(true);
@@ -20,19 +22,26 @@ const App: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollTimeout, setScrollTimeout] = useState<number | null>(null);
 
-  const flights = flightStore.flights;
-  const dateList = flightStore.dateList;
-  const selectedDate = flightStore.selectedDate;
-  const sortType = flightStore.sortType;
-  const isLoading = flightStore.isLoading;
+  const dispatch = useAppDispatch();
+  const flights = useAppSelector((state) => state.flight.flights);
+  const dateList = useAppSelector((state) => state.flight.dateList);
+  const selectedDate = useAppSelector((state) => state.flight.selectedDate);
+  const sortType = useAppSelector((state) => state.flight.sortType);
+  const isLoading = useAppSelector((state) => state.flight.isLoading);
+
+  useEffect(() => {
+    dispatch(initFlightData());
+  }, [dispatch]);
 
   const handleDateChange = useCallback((date: string) => {
-    flightStore.setSelectedDate(date);
-  }, []);
+    dispatch(setSelectedDate(date));
+    dispatch(loadFlights({ date, sort: sortType }));
+  }, [dispatch, sortType]);
 
   const handleSortChange = useCallback((sort: SortType) => {
-    flightStore.setSortType(sort);
-  }, []);
+    dispatch(setSortType(sort));
+    dispatch(loadFlights({ date: selectedDate, sort }));
+  }, [dispatch, selectedDate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,8 +89,8 @@ const App: React.FC = () => {
   };
 
   const handleRefresh = useCallback(() => {
-    flightStore.loadFlights();
-  }, []);
+    dispatch(loadFlights({ date: selectedDate, sort: sortType }));
+  }, [dispatch, selectedDate, sortType]);
 
   return (
     <div className="app">
@@ -108,4 +117,12 @@ const App: React.FC = () => {
   );
 };
 
-export default observer(App);
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <FlightApp />
+    </Provider>
+  );
+};
+
+export default App;
