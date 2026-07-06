@@ -1,0 +1,70 @@
+=======================================================
+                   SCSS 学习笔记
+=======================================================
+
+一、核心知识点
+
+1. 变量（Variables）
+   - $variable-name: value;
+   - 作用域: 局部变量和全局变量
+   - !global: 将局部变量提升为全局变量
+
+2. 嵌套（Nesting）
+   - 父选择器中嵌套子选择器
+   - &: 引用父选择器
+   - 嵌套属性: font: { size: 14px; weight: bold; }
+
+3. 混合宏（Mixins）
+   - @mixin mixin-name($param1, $param2) { ... }
+   - @include mixin-name(value1, value2);
+   - 带默认参数的混合宏
+
+4. 继承（Extend）
+   - %placeholder: 占位符选择器
+   - @extend %placeholder;
+   - 共享样式，生成组合选择器
+
+5. 函数（Functions）
+   - @function function-name($param) { ... @return value; }
+   - 内置函数: color(), math(), string()等
+   - 自定义函数
+
+6. 运算（Operations）
+   - 数学运算: +, -, *, /, %
+   - 颜色运算
+   - 单位换算
+
+7. 条件语句
+   - @if, @else if, @else
+   - @for循环
+   - @each循环
+   - @while循环
+
+二、重点难点
+
+1. 变量作用域
+   - 局部变量只在当前选择器内有效
+   - 使用!global提升为全局变量
+   - 变量覆盖: 内层变量覆盖外层变量
+
+2. Mixin vs Extend
+   - Mixin: 生成重复代码，适合带参数的样式
+   - Extend: 生成组合选择器，适合共享不变样式
+
+3. 编译输出
+   - 嵌套会展开为后代选择器
+   - &会被替换为父选择器
+
+三、学习心得
+
+- SCSS让CSS更具逻辑性和可维护性
+- 变量和混合宏减少了代码重复
+- 嵌套让样式结构更清晰
+- 函数和条件语句增加了CSS的灵活性
+
+四、关键概念总结
+
+- 预处理: SCSS需要编译为CSS才能在浏览器中运行
+- 编译工具: node-sass, sass-loader, dart-sass
+- 模块化: 通过@import导入其他SCSS文件
+- 命名规范: 建议使用驼峰式或短横线命名

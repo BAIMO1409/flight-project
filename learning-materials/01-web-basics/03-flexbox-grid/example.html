@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox & Grid示例</title>
+    <style>
+        /* ============================================
+           1. Flexbox示例
+           ============================================ */
+        
+        /* flex容器 */
+        .flex-container {
+            display: flex; /* 启用flex布局 */
+            flex-direction: row; /* 主轴方向：水平 */
+            flex-wrap: wrap; /* 换行 */
+            justify-content: space-between; /* 水平方向：两端对齐 */
+            align-items: center; /* 垂直方向：居中 */
+            gap: 12px; /* 间距 */
+            background-color: #f0f4f8;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        /* flex项目 */
+        .flex-item {
+            flex: 1; /* flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+            min-width: 120px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .flex-item.large {
+            flex: 2; /* 占用双倍空间 */
+        }
+
+        .flex-item.center {
+            align-self: center; /* 单独设置对齐方式 */
+        }
+
+        /* ============================================
+           2. Grid示例
+           ============================================ */
+        
+        /* grid容器 */
+        .grid-container {
+            display: grid; /* 启用grid布局 */
+            grid-template-columns: repeat(4, 1fr); /* 4列，每列等宽 */
+            grid-template-rows: auto auto; /* 2行，自动高度 */
+            gap: 12px; /* 网格间距 */
+            background-color: #f0f4f8;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        /* grid项目 */
+        .grid-item {
+            background-color: white;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .grid-item.header {
+            grid-column: span 4; /* 跨4列 */
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .grid-item.main {
+            grid-column: span 3; /* 跨3列 */
+            grid-row: span 2; /* 跨2行 */
+        }
+
+        .grid-item.sidebar {
+            grid-column: span 1; /* 跨1列 */
+            grid-row: span 2; /* 跨2行 */
+        }
+
+        /* ============================================
+           3. 实际应用：航班搜索表单
+           ============================================ */
+        
+        .search-form {
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            gap: 12px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .swap-btn {
+            background-color: #f0f4f8;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .swap-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .submit-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2563eb;
+        }
+
+        /* ============================================
+           4. 实际应用：日期选择器（水平滚动）
+           ============================================ */
+        
+        .date-picker {
+            display: flex;
+            overflow-x: auto; /* 水平滚动 */
+            gap: 12px;
+            background-color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            scrollbar-width: none; /* 隐藏滚动条 */
+        }
+
+        .date-picker::-webkit-scrollbar {
+            display: none; /* 隐藏滚动条 */
+        }
+
+        .date-item {
+            flex-shrink: 0; /* 不缩小 */
+            width: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-item:hover {
+            background-color: #f0f4f8;
+        }
+
+        .date-item.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .date-day {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .date-week {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .date-price {
+            font-size: 12px;
+            margin-top: 4px;
+            color: #ef4444;
+        }
+
+        .date-item.active .date-price {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2>1. Flexbox示例 - 水平排列</h2>
+        <div class="flex-container">
+            <div class="flex-item">项目1</div>
+            <div class="flex-item">项目2</div>
+            <div class="flex-item large">项目3（双倍宽度）</div>
+            <div class="flex-item">项目4</div>
+        </div>
+
+        <h2>2. Grid示例 - 二维布局</h2>
+        <div class="grid-container">
+            <div class="grid-item header">页面标题</div>
+            <div class="grid-item">内容1</div>
+            <div class="grid-item">内容2</div>
+            <div class="grid-item">内容3</div>
+            <div class="grid-item main">主内容区域</div>
+            <div class="grid-item sidebar">侧边栏</div>
+        </div>
+
+        <h2>3. 实际应用 - 航班搜索表单</h2>
+        <form class="search-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>出发地</label>
+                    <input type="text" placeholder="请输入城市">
+                </div>
+                <button type="button" class="swap-btn">↔️</button>
+                <div class="form-group">
+                    <label>目的地</label>
+                    <input type="text" placeholder="请输入城市">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>出发日期</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>排序方式</label>
+                    <select>
+                        <option>推荐排序</option>
+                        <option>时间排序</option>
+                        <option>价格排序</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">搜索航班</button>
+        </form>
+
+        <h2>4. 实际应用 - 日期选择器</h2>
+        <div class="date-picker">
+            <div class="date-item">
+                <span class="date-day">05</span>
+                <span class="date-week">周二</span>
+                <span class="date-price">¥500</span>
+            </div>
+            <div class="date-item active">
+                <span class="date-day">06</span>
+                <span class="date-week">周三</span>
+                <span class="date-price">¥480</span>
+            </div>
+            <div class="date-item">
+                <span class="date-day">07</span>
+                <span class="date-week">周四</span>
+                <span class="date-price">¥520</span>
+            </div>
+            <div class="date-item">
+                <span class="date-day">08</span>
+                <span class="date-week">周五</span>
+                <span class="date-price">¥450</span>
+            </div>
+            <div class="date-item">
+                <span class="date-day">09</span>
+                <span class="date-week">周六</span>
+                <span class="date-price">¥600</span>
+            </div>
+            <div class="date-item">
+                <span class="date-day">10</span>
+                <span class="date-week">周日</span>
+                <span class="date-price">¥580</span>
+            </div>
+            <div class="date-item">
+                <span class="date-day">11</span>
+                <span class="date-week">周一</span>
+                <span class="date-price">¥490</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

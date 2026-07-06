@@ -1,0 +1,85 @@
+=======================================================
+                  Webpack 学习笔记
+=======================================================
+
+一、核心知识点
+
+1. Webpack基础
+   - 简介: 现代JavaScript应用的静态模块打包工具
+   - 特点: 模块打包、代码分割、热更新
+   - 核心概念: Entry、Output、Loader、Plugin
+
+2. 配置文件
+   - webpack.config.js
+   - 基本结构: module.exports = { ... }
+
+3. Entry（入口）
+   - 单入口: entry: './src/index.js'
+   - 多入口: entry: { main: './src/index.js', vendor: './src/vendor.js' }
+
+4. Output（输出）
+   - filename: 输出文件名
+   - path: 输出目录
+   - publicPath: 公共路径
+
+5. Loader（加载器）
+   - 作用: 将非JavaScript文件转换为模块
+   - 常用Loader:
+     - ts-loader: TypeScript编译
+     - css-loader: CSS处理
+     - style-loader: 注入CSS到DOM
+     - sass-loader: SCSS编译
+     - file-loader: 文件处理
+     - url-loader: URL处理
+
+6. Plugin（插件）
+   - 作用: 扩展Webpack功能
+   - 常用Plugin:
+     - HtmlWebpackPlugin: 生成HTML
+     - MiniCssExtractPlugin: 提取CSS
+     - CleanWebpackPlugin: 清理构建目录
+     - DefinePlugin: 定义环境变量
+
+7. 模式（Mode）
+   - development: 开发模式（不压缩、保留source map）
+   - production: 生产模式（压缩、优化）
+   - none: 无模式
+
+8. 开发服务器
+   - webpack-dev-server
+   - hot: 热更新
+   - open: 自动打开浏览器
+
+9. 代码分割
+   - 入口分割
+   - SplitChunksPlugin: 公共代码提取
+   - 动态导入: import()
+
+二、重点难点
+
+1. Loader的执行顺序
+   - 从右到左执行
+   - 如: use: ['style-loader', 'css-loader', 'sass-loader']
+
+2. 插件的配置
+   - 插件需要实例化
+   - 插件顺序可能影响结果
+
+3. 代码分割策略
+   - 提取第三方库
+   - 提取公共代码
+   - 按需加载
+
+三、学习心得
+
+- Webpack是现代前端工程化的核心工具
+- Loader处理文件转换，Plugin扩展功能
+- 开发模式和生产模式配置不同
+- 代码分割可以优化加载性能
+
+四、关键概念总结
+
+- 模块: 可以通过import/export导入导出的代码单元
+- 打包: 将多个模块合并为一个或多个bundle
+- 树摇: 移除未使用的代码（production模式）
+- 热更新: 修改代码后无需刷新页面即可更新

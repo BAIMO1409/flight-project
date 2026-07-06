@@ -1,0 +1,94 @@
+=======================================================
+                  JavaScript 学习笔记
+=======================================================
+
+一、核心知识点
+
+1. 数据类型
+   - 基本类型: string, number, boolean, null, undefined, symbol, bigint
+   - 引用类型: object（包括array, function, date等）
+   - typeof操作符: 判断数据类型
+
+2. 运算符
+   - 算术运算符: +, -, *, /, %, **
+   - 比较运算符: ==, ===, !=, !==, >, <, >=, <=
+   - 逻辑运算符: &&, ||, !
+   - 赋值运算符: =, +=, -=, *=, /=
+
+3. 流程控制
+   - if/else条件语句
+   - switch语句
+   - for循环, while循环, do-while循环
+   - break, continue, return
+
+4. 函数
+   - 函数声明: function name() {}
+   - 函数表达式: const name = function() {}
+   - 立即执行函数: (function() {})()
+   - 箭头函数: const name = () => {}
+
+5. 作用域
+   - 全局作用域
+   - 函数作用域
+   - 块级作用域（ES6+）
+
+6. 闭包（Closure）
+   - 定义: 函数能够访问其词法作用域之外的变量
+   - 用途: 数据封装、模块化、函数柯里化
+   - 注意: 内存泄漏风险
+
+7. 原型链（Prototype Chain）
+   - 每个对象都有__proto__属性
+   - __proto__指向其构造函数的prototype
+   - Object.prototype是原型链的终点
+
+8. DOM操作
+   - 获取元素: getElementById, getElementsByClassName, querySelector
+   - 修改元素: innerHTML, textContent, style
+   - 添加/删除元素: appendChild, removeChild, createElement
+
+9. BOM操作
+   - window对象: alert, confirm, prompt
+   - location对象: href, reload
+   - history对象: pushState, replaceState
+
+10. 事件处理
+    - 事件绑定: addEventListener
+    - 事件类型: click, mouseover, keydown, scroll
+    - 事件委托: 利用事件冒泡实现高效事件处理
+
+11. 异步编程
+    - 回调函数
+    - Promise
+    - async/await
+
+二、重点难点
+
+1. 闭包的理解和应用
+   - 闭包形成的条件: 函数嵌套 + 内部函数引用外部变量
+   - 闭包的特点: 变量不会被垃圾回收
+   - 闭包的应用: 模块化、私有变量
+
+2. 原型链的理解
+   - 原型继承的原理
+   - 原型链查找机制
+   - 构造函数、prototype、__proto__之间的关系
+
+3. 异步编程
+   - 事件循环机制
+   - Promise的状态转换
+   - async/await的执行顺序
+
+三、学习心得
+
+- JavaScript是一门灵活但容易出错的语言
+- 理解作用域和闭包是掌握JavaScript的关键
+- 原型链是JavaScript面向对象的基础
+- 异步编程是现代Web开发的核心
+
+四、关键概念总结
+
+- 词法作用域: 变量的作用域在定义时确定
+- 执行上下文: 函数执行时的环境
+- 调用栈: 函数调用的堆栈
+- 事件循环: 处理异步任务的机制

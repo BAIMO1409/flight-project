@@ -1,0 +1,73 @@
+=======================================================
+                  MobX 学习笔记
+=======================================================
+
+一、核心知识点
+
+1. MobX基础
+   - 简介: 简单可扩展的状态管理库
+   - 特点: 响应式、自动追踪依赖、简洁API
+   - 安装: npm install mobx mobx-react-lite
+
+2. 核心概念
+   - Observable: 可观察状态
+   - Computed: 计算属性（自动追踪依赖）
+   - Action: 修改状态的动作
+   - Reaction: 响应状态变化的副作用
+
+3. 可观察状态（Observable）
+   - observable(): 创建可观察对象/数组/映射
+   - @observable: 装饰器方式
+   - makeAutoObservable: 自动使类成员可观察
+
+4. 计算属性（Computed）
+   - computed(): 创建计算属性
+   - @computed: 装饰器方式
+   - 特点: 惰性计算、缓存结果、依赖变化时自动更新
+
+5. 动作（Action）
+   - action(): 创建动作
+   - @action: 装饰器方式
+   - runInAction: 异步操作中更新状态
+   - 特点: 批量更新、优化性能
+
+6. 响应（Reaction）
+   - autorun: 自动运行，追踪所有依赖
+   - reaction: 条件响应，仅当依赖变化时运行
+   - when: 条件等待，条件满足时运行一次
+
+7. MobX与React集成
+   - observer: 高阶组件，使组件响应状态变化
+   - useLocalObservable: 创建本地可观察状态
+   - useObservable: 创建可观察状态
+
+二、重点难点
+
+1. 响应式原理
+   - MobX使用代理（Proxy）实现响应式
+   - 自动追踪依赖关系
+   - 状态变化时自动更新相关计算属性和组件
+
+2. Action的使用
+   - 所有状态修改都应在Action中进行
+   - 异步操作中需要使用runInAction或@action.bound
+
+3. 性能优化
+   - 使用computed缓存计算结果
+   - 使用observer避免不必要的重新渲染
+   - 使用reaction替代autorun减少不必要的副作用
+
+三、学习心得
+
+- MobX的API非常简洁，学习曲线平缓
+- 响应式编程让状态管理更直观
+- 自动追踪依赖减少了手动订阅的代码
+- 适合中小型项目，代码量比Redux少
+
+四、关键概念总结
+
+- Observable: 可观察的状态，变化时通知观察者
+- Computed: 基于其他状态计算的值，自动缓存
+- Action: 修改状态的函数，批量更新
+- Reaction: 响应状态变化的副作用函数
+- Observer: 响应状态变化的React组件
